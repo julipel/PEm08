@@ -1,6 +1,6 @@
 """
-Сервис для работы с ProxyAPI (OpenAI-совместимый API)
-https://proxyapi.ru/docs/openai-text-generation
+Сервис для работы с OpenAI API
+https://platform.openai.com/docs/api-reference
 """
 import base64
 import json
@@ -19,20 +19,18 @@ logger = logging.getLogger("competitor_monitor.openai")
 
 
 class OpenAIService:
-    """Сервис для анализа через ProxyAPI"""
+    """Сервис для анализа через OpenAI API"""
     
     def __init__(self):
         logger.info("=" * 50)
         logger.info("Инициализация OpenAI сервиса")
-        logger.info(f"  Base URL: {settings.proxy_api_base_url}")
         logger.info(f"  Модель текста: {settings.openai_model}")
         logger.info(f"  Модель vision: {settings.openai_vision_model}")
-        logger.info(f"  API ключ: {'*' * 10}...{settings.proxy_api_key[-4:] if settings.proxy_api_key else 'НЕ ЗАДАН'}")
+        logger.info(f"  API ключ: {'*' * 10}...{settings.openai_key[-4:] if settings.openai_key else 'НЕ ЗАДАН'}")
         
-        # ProxyAPI - OpenAI-совместимый API для России
+        # OpenAI API
         self.client = OpenAI(
-            api_key=settings.proxy_api_key,
-            base_url=settings.proxy_api_base_url
+            api_key=settings.openai_key
         )
         self.model = settings.openai_model
         self.vision_model = settings.openai_vision_model
@@ -147,11 +145,15 @@ class OpenAIService:
     "marketing_insights": ["инсайт 1", "инсайт 2", ...],
     "visual_style_score": 7,
     "visual_style_analysis": "Анализ визуального стиля конкурента",
+    "design_score": 8,
+    "animation_potential": 6,
     "recommendations": ["рекомендация 1", "рекомендация 2", ...]
 }
 
 Важно:
-- visual_style_score от 0 до 10
+- visual_style_score от 0 до 10 (оценка визуального стиля: цвета, типографика, композиция)
+- design_score от 0 до 10 (общая оценка качества дизайна: целостность, современность, профессионализм)
+- animation_potential от 0 до 10 (потенциал для анимации/интерактивности: насколько элементы подходят для анимации, как это может улучшить UX)
 - Каждый массив должен содержать 3-5 пунктов
 - Пиши на русском языке
 - Оценивай: цветовую палитру, типографику, композицию, UX/UI элементы"""
@@ -197,10 +199,12 @@ class OpenAIService:
                 marketing_insights=data.get("marketing_insights", []),
                 visual_style_score=data.get("visual_style_score", 5),
                 visual_style_analysis=data.get("visual_style_analysis", ""),
+                design_score=data.get("design_score", 5),
+                animation_potential=data.get("animation_potential", 5),
                 recommendations=data.get("recommendations", [])
             )
             
-            logger.info(f"  Результат: оценка стиля {result.visual_style_score}/10")
+            logger.info(f"  Результат: стиль {result.visual_style_score}/10, дизайн {result.design_score}/10, анимация {result.animation_potential}/10")
             logger.info(f"  Инсайтов: {len(result.marketing_insights)}, рекомендаций: {len(result.recommendations)}")
             logger.info("=" * 50)
             
@@ -279,7 +283,9 @@ class OpenAIService:
     "weaknesses": ["слабая сторона 1", "слабая сторона 2", ...],
     "unique_offers": ["уникальное предложение/фича 1", "уникальное предложение/фича 2", ...],
     "recommendations": ["рекомендация 1", "рекомендация 2", ...],
-    "summary": "Комплексное резюме анализа сайта конкурента"
+    "summary": "Комплексное резюме анализа сайта конкурента",
+    "design_score": 8,
+    "animation_potential": 7
 }
 
 При анализе обращай внимание на:
@@ -291,6 +297,8 @@ class OpenAIService:
 - Технологичность и современность дизайна
 
 Важно:
+- design_score от 0 до 10 (общая оценка качества дизайна сайта: целостность, современность, профессионализм, визуальная привлекательность)
+- animation_potential от 0 до 10 (потенциал для анимации/интерактивности: насколько элементы сайта подходят для анимации, микроинтеракций, как это может улучшить UX и вовлеченность)
 - Каждый массив должен содержать 4-6 конкретных пунктов
 - Пиши на русском языке
 - Будь конкретен и практичен
@@ -337,7 +345,9 @@ class OpenAIService:
                 weaknesses=data.get("weaknesses", []),
                 unique_offers=data.get("unique_offers", []),
                 recommendations=data.get("recommendations", []),
-                summary=data.get("summary", "")
+                summary=data.get("summary", ""),
+                design_score=data.get("design_score"),
+                animation_potential=data.get("animation_potential")
             )
             
             logger.info(f"  Результат:")
@@ -345,6 +355,10 @@ class OpenAIService:
             logger.info(f"    - Слабых сторон: {len(result.weaknesses)}")
             logger.info(f"    - УТП: {len(result.unique_offers)}")
             logger.info(f"    - Рекомендаций: {len(result.recommendations)}")
+            if result.design_score is not None:
+                logger.info(f"    - Оценка дизайна: {result.design_score}/10")
+            if result.animation_potential is not None:
+                logger.info(f"    - Потенциал анимации: {result.animation_potential}/10")
             logger.info(f"  Резюме: {result.summary[:100]}...")
             logger.info("=" * 50)
             

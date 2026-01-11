@@ -1,10 +1,9 @@
 """
 Конфигурация приложения
 """
-import os
 import logging
 import sys
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -42,11 +41,10 @@ logger = setup_logging()
 class Settings(BaseSettings):
     """Настройки приложения"""
     
-    # ProxyAPI (OpenAI-совместимый)
-    proxy_api_key: str = os.getenv("PROXY_API_KEY", "")
-    proxy_api_base_url: str = "https://api.proxyapi.ru/openai/v1"
-    openai_model: str = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
-    openai_vision_model: str = os.getenv("OPENAI_VISION_MODEL", "gpt-4o-mini")
+    # OpenAI API
+    openai_key: str = ""
+    openai_model: str = "gpt-4o-mini"
+    openai_vision_model: str = "gpt-4o-mini"
     
     # API
     api_host: str = "0.0.0.0"
@@ -59,10 +57,13 @@ class Settings(BaseSettings):
     # Парсер
     parser_timeout: int = 10
     parser_user_agent: str = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+    competitor_urls: str = ""  # Список URL конкурентов через запятую (например: "example.com,test.com")
     
-    class Config:
-        env_file = ".env"
-        extra = "ignore"
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        extra="ignore",
+        case_sensitive=False
+    )
 
 
 settings = Settings()

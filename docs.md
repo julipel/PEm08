@@ -343,18 +343,18 @@ curl -X GET "http://localhost:8000/health"
 
 | Переменная | Описание | По умолчанию |
 |------------|----------|--------------|
-| `PROXY_API_KEY` | API ключ [ProxyAPI](https://proxyapi.ru/) | - |
+| `OPENAI_KEY` | API ключ [OpenAI](https://platform.openai.com/api-keys) | - |
 | `OPENAI_MODEL` | Модель для текста | `gpt-4o-mini` |
 | `OPENAI_VISION_MODEL` | Модель для изображений | `gpt-4o-mini` |
 | `API_HOST` | Хост сервера | `0.0.0.0` |
 | `API_PORT` | Порт сервера | `8000` |
 
-### ProxyAPI
+### OpenAI API
 
-Проект использует [ProxyAPI](https://proxyapi.ru/) — OpenAI-совместимый API для России.
-- Без VPN и блокировок
-- Оплата в рублях
-- [Документация](https://proxyapi.ru/docs/openai-text-generation)
+Проект использует [OpenAI API](https://platform.openai.com/) для работы с GPT моделями.
+- Получить API ключ: https://platform.openai.com/api-keys
+- Документация: https://platform.openai.com/docs/api-reference
+- Доступные модели: gpt-4o, gpt-4o-mini, gpt-4-turbo, gpt-3.5-turbo
 
 ### Настройки истории
 

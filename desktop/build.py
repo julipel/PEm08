@@ -32,7 +32,7 @@ def build_exe():
     
     # Параметры PyInstaller
     pyinstaller_args = [
-        "pyinstaller",
+        sys.executable, "-m", "PyInstaller",  # Используем python -m PyInstaller
         "--name", app_name,
         "--onefile",           # Один .exe файл
         "--windowed",          # Без консоли

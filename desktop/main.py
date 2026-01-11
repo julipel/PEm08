@@ -532,6 +532,40 @@ class MainWindow(QMainWindow):
                 summary_layout.addWidget(summary_title)
                 summary_layout.addWidget(summary_text)
                 self.results_layout.addWidget(summary_frame)
+            
+            # Оценка дизайна (для parse результатов)
+            if result_type == "parse" and analysis.get("design_score") is not None:
+                design_score = analysis["design_score"]
+                design_frame = QFrame()
+                design_frame.setObjectName("resultBlock")
+                design_layout = QVBoxLayout(design_frame)
+                
+                design_title = QLabel("🎨 Оценка дизайна")
+                design_title.setObjectName("sectionTitle")
+                
+                design_value = QLabel(f"{design_score}/10")
+                design_value.setStyleSheet("font-size: 32px; font-weight: bold; color: #22d3ee;")
+                
+                design_layout.addWidget(design_title)
+                design_layout.addWidget(design_value)
+                self.results_layout.addWidget(design_frame)
+            
+            # Потенциал анимации (для parse результатов)
+            if result_type == "parse" and analysis.get("animation_potential") is not None:
+                anim_score = analysis["animation_potential"]
+                anim_frame = QFrame()
+                anim_frame.setObjectName("resultBlock")
+                anim_layout = QVBoxLayout(anim_frame)
+                
+                anim_title = QLabel("✨ Потенциал для анимации")
+                anim_title.setObjectName("sectionTitle")
+                
+                anim_value = QLabel(f"{anim_score}/10")
+                anim_value.setStyleSheet("font-size: 32px; font-weight: bold; color: #22d3ee;")
+                
+                anim_layout.addWidget(anim_title)
+                anim_layout.addWidget(anim_value)
+                self.results_layout.addWidget(anim_frame)
         
         elif result_type == "image":
             # Описание
@@ -573,6 +607,40 @@ class MainWindow(QMainWindow):
                 score_layout.addWidget(score_title)
                 score_layout.addWidget(score_value)
                 self.results_layout.addWidget(score_frame)
+            
+            # Оценка дизайна
+            if analysis.get("design_score") is not None:
+                design_score = analysis["design_score"]
+                design_frame = QFrame()
+                design_frame.setObjectName("resultBlock")
+                design_layout = QVBoxLayout(design_frame)
+                
+                design_title = QLabel("🎨 Оценка дизайна")
+                design_title.setObjectName("sectionTitle")
+                
+                design_value = QLabel(f"{design_score}/10")
+                design_value.setStyleSheet("font-size: 32px; font-weight: bold; color: #22d3ee;")
+                
+                design_layout.addWidget(design_title)
+                design_layout.addWidget(design_value)
+                self.results_layout.addWidget(design_frame)
+            
+            # Потенциал анимации
+            if analysis.get("animation_potential") is not None:
+                anim_score = analysis["animation_potential"]
+                anim_frame = QFrame()
+                anim_frame.setObjectName("resultBlock")
+                anim_layout = QVBoxLayout(anim_frame)
+                
+                anim_title = QLabel("✨ Потенциал для анимации")
+                anim_title.setObjectName("sectionTitle")
+                
+                anim_value = QLabel(f"{anim_score}/10")
+                anim_value.setStyleSheet("font-size: 32px; font-weight: bold; color: #22d3ee;")
+                
+                anim_layout.addWidget(anim_title)
+                anim_layout.addWidget(anim_value)
+                self.results_layout.addWidget(anim_frame)
             
             # Маркетинговые инсайты
             if analysis.get("marketing_insights"):
